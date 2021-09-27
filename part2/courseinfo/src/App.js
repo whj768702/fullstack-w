@@ -1,5 +1,5 @@
 import Course from './Course';
-import Notes from './Notes';
+import Phonebook from './Phonebook';
 
 function App() {
   const course = [
@@ -49,8 +49,8 @@ function App() {
 
   return (
     <div>
-      <h2>Notes</h2>
-      <Notes />
+      <h2>Phonebook</h2>
+      <Phonebook />
       <header>{course.name}</header>
       <section>
         {course.map((parts, index) => {
