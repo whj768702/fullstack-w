@@ -1,5 +1,6 @@
 import Course from './Course';
 import Phonebook from './Phonebook';
+import Country from './Country';
 
 function App() {
   const course = [
@@ -49,6 +50,7 @@ function App() {
 
   return (
     <div>
+      <Country></Country>
       <h2>Phonebook</h2>
       <Phonebook />
       <header>{course.name}</header>
