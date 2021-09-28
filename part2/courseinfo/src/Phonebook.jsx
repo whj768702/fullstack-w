@@ -22,6 +22,22 @@ const Phonebook = () => {
     });
   }, []);
 
+  const addPhoneInfo = (info) => {
+    axios.post(
+      'http://localhost:3001/persons',
+      info
+    ).then(res => {
+      console.log('res 111: ', res);
+      if (res.status === 201) {
+        setPersons(persons.concat(res.data));
+        setShowPersons(persons.concat(res.data));
+        setNewName('');
+        setNewPhone('');
+      }
+      // setPersons(res.data);
+      // setShowPersons(res.data);
+    });
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -32,12 +48,9 @@ const Phonebook = () => {
     const personObj = {
       name: newName,
       date: new Date().toLocaleString(),
-      id: persons.length + 1,
       number: newPhone,
     };
-    setPersons(persons.concat(personObj));
-    setNewName('');
-    setNewPhone('');
+    addPhoneInfo(personObj);
     // setNotes(pre=> [...pre, e.target.value]);
   }
 
