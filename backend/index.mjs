@@ -29,6 +29,13 @@ app.get('/api/persons', (req, res) => {
   res.json(persons);
 });
 
+app.get('/info', (req, res) => {
+  res.send(`
+  <div>电话簿有${persons.length}条信息</div>
+  <div>${new Date()}</div>
+  `)
+})
+
 const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`server runing on port ${PORT}`);
