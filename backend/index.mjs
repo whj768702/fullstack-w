@@ -25,8 +25,14 @@ const persons = [
   }
 ];
 
-app.get('/api/persons', (req, res) => {
-  res.json(persons);
+app.get('/api/persons/:id', (req, res) => {
+  const id = req.params.id;
+  const person = persons.find(person => person.id == id);
+  if (person) {
+    res.json(person);
+  } else {
+    res.json({ message: 'not found' });
+  }
 });
 
 app.get('/info', (req, res) => {
