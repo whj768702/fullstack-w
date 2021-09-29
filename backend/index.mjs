@@ -2,6 +2,8 @@ import express from 'express';
 
 const app = express();
 
+app.use(express.json());
+
 const persons = [
   {
     "id": 1,
@@ -44,8 +46,15 @@ app.delete('/api/persons/:id', (req, res) => {
     persons.splice(index, 1);
     res.status(204).end();
   }
-
 });
+
+app.post('/api/persons', (req, res) => {
+  const person = req.body;
+  console.log('post person: ', person);
+  person.id = Math.floor(Math.random() * 10000);
+  persons.push(person);
+  res.json(person);
+})
 
 app.get('/info', (req, res) => {
   res.send(`
