@@ -37,19 +37,39 @@ const Phonebook = () => {
       }
     });
   }
+  const updatePhoneInfo = (params) => {
+    axios.put(`http://localhost:3001/persons/${params.id}`, params)
+      .then(res => {
+        console.log('put res: ', res);
+        if (res.status === 200) {
+          getPhonebook();
+        }
+        // if (res.status === 201) {
+        //   setPersons(persons.concat(res.data));
+        //   setShowPersons(persons.concat(res.data));
+        //   setNewName('');
+        //   setNewPhone('');
+        // }
+      });
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (persons.find(item => item.name === newName)) {
-      window.alert(`${newName} is already added to phonebook.`);
-      return;
+    let confirm = true;
+    const existingPhone = persons.find(item => item.name === newName);
+    if (existingPhone) {
+      confirm = window.confirm(`${newName} 已经被添加，是否更新旧号码?`);
+      if (confirm) {
+        updatePhoneInfo({ ...existingPhone, number: newPhone })
+      }
+    } else {
+      const personObj = {
+        name: newName,
+        date: new Date().toLocaleString(),
+        number: newPhone,
+      };
+      addPhoneInfo(personObj);
     }
-    const personObj = {
-      name: newName,
-      date: new Date().toLocaleString(),
-      number: newPhone,
-    };
-    addPhoneInfo(personObj);
   }
 
   const handleNameChange = (e) => {
