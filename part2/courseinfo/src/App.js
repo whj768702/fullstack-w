@@ -50,10 +50,10 @@ function App() {
 
   return (
     <div>
-      <Country></Country>
+      {/* <Country></Country> */}
       <h2>Phonebook</h2>
       <Phonebook />
-      <header>{course.name}</header>
+      {/* <header>{course.name}</header>
       <section>
         {course.map((parts, index) => {
           return (
@@ -70,7 +70,7 @@ function App() {
             </div>
           );
         })}
-      </section>
+      </section> */}
     </div>
   );
 }

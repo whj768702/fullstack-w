@@ -4,6 +4,7 @@ import axios from 'axios';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
+import Notification from './Notification';
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([]);
@@ -11,6 +12,7 @@ const Phonebook = () => {
   const [newPhone, setNewPhone] = useState('');
   const [keyword, setKeyword] = useState('');
   const [showPersons, setShowPersons] = useState(persons);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const getPhonebook = () => {
     axios.get(
@@ -34,22 +36,23 @@ const Phonebook = () => {
         setShowPersons(persons.concat(res.data));
         setNewName('');
         setNewPhone('');
+        setErrorMessage(`${newName}添加成功`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
       }
     });
   }
   const updatePhoneInfo = (params) => {
     axios.put(`http://localhost:3001/persons/${params.id}`, params)
       .then(res => {
-        console.log('put res: ', res);
         if (res.status === 200) {
           getPhonebook();
+          setErrorMessage(`${newName}号码更新成功,新号码${newPhone}`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
         }
-        // if (res.status === 201) {
-        //   setPersons(persons.concat(res.data));
-        //   setShowPersons(persons.concat(res.data));
-        //   setNewName('');
-        //   setNewPhone('');
-        // }
       });
   }
   const handleSubmit = (e) => {
@@ -80,10 +83,8 @@ const Phonebook = () => {
   }
 
   const handleKeywordChange = (e) => {
-    console.log('showPersons: ', showPersons);
     setKeyword(e.target.value);
     const result = persons.filter(person => person.name.toLowerCase().includes(e.target.value.toLowerCase()));
-    console.log('result: ', result);
     setShowPersons(result);
   }
 
@@ -93,14 +94,19 @@ const Phonebook = () => {
     ).then(res => {
       if (res.status === 200) {
         getPhonebook();
+
+        setErrorMessage(`${newName}删除成功`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
       }
     });
-
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage}></Notification>
       <Filter keyword={keyword} handleKeywordChange={handleKeywordChange}></Filter>
       <h3>add a new</h3>
       <PersonForm handleSubmit={handleSubmit} newName={newName} handleNameChange={handleNameChange} newPhone={newPhone} handlePhoneChange={handlePhoneChange}></PersonForm>
