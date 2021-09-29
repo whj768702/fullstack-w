@@ -25,6 +25,9 @@ const persons = [
   }
 ];
 
+app.get('/api/persons', (req, res) => {
+  res.json(persons);
+});
 app.get('/api/persons/:id', (req, res) => {
   const id = req.params.id;
   const person = persons.find(person => person.id == id);
@@ -33,6 +36,15 @@ app.get('/api/persons/:id', (req, res) => {
   } else {
     res.json({ message: 'not found' });
   }
+});
+app.delete('/api/persons/:id', (req, res) => {
+  const id = req.params.id;
+  const index = persons.findIndex(person => person.id == id);
+  if (index > -1) {
+    persons.splice(index, 1);
+    res.status(204).end();
+  }
+
 });
 
 app.get('/info', (req, res) => {
