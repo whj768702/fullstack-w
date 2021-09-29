@@ -12,14 +12,16 @@ const Phonebook = () => {
   const [keyword, setKeyword] = useState('');
   const [showPersons, setShowPersons] = useState(persons);
 
-  useEffect(() => {
+  const getPhonebook = () => {
     axios.get(
       'http://localhost:3001/persons',
     ).then(res => {
-      console.log('res: ', res);
       setPersons(res.data);
       setShowPersons(res.data);
     });
+  }
+  useEffect(() => {
+    getPhonebook();
   }, []);
 
   const addPhoneInfo = (info) => {
@@ -27,15 +29,12 @@ const Phonebook = () => {
       'http://localhost:3001/persons',
       info
     ).then(res => {
-      console.log('res 111: ', res);
       if (res.status === 201) {
         setPersons(persons.concat(res.data));
         setShowPersons(persons.concat(res.data));
         setNewName('');
         setNewPhone('');
       }
-      // setPersons(res.data);
-      // setShowPersons(res.data);
     });
   }
   const handleSubmit = (e) => {
@@ -51,7 +50,6 @@ const Phonebook = () => {
       number: newPhone,
     };
     addPhoneInfo(personObj);
-    // setNotes(pre=> [...pre, e.target.value]);
   }
 
   const handleNameChange = (e) => {
@@ -69,6 +67,17 @@ const Phonebook = () => {
     setShowPersons(result);
   }
 
+  const handleDelete = (id) => {
+    axios.delete(
+      `http://localhost:3001/persons/${id}`,
+    ).then(res => {
+      if (res.status === 200) {
+        getPhonebook();
+      }
+    });
+
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -76,7 +85,7 @@ const Phonebook = () => {
       <h3>add a new</h3>
       <PersonForm handleSubmit={handleSubmit} newName={newName} handleNameChange={handleNameChange} newPhone={newPhone} handlePhoneChange={handlePhoneChange}></PersonForm>
       <h2>Number</h2>
-      <Persons persons={showPersons}></Persons>
+      <Persons persons={showPersons} deletePhone={handleDelete}></Persons>
     </div>
   );
 }
