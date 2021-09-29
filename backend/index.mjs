@@ -50,10 +50,19 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
   const person = req.body;
-  console.log('post person: ', person);
-  person.id = Math.floor(Math.random() * 10000);
-  persons.push(person);
-  res.json(person);
+  if (!person.name || !person.number) {
+    res.json({ error: '姓名或电话不能为空' }).end();
+    return;
+  }
+  const result = persons.find(item => item.name === person.name);
+  if (result) {
+    console.log('result: ', result);
+    res.json({ error: `${result.name}已经存在` }).end();
+  } else {
+    person.id = Math.floor(Math.random() * 10000);
+    persons.push(person);
+    res.json(person);
+  }
 })
 
 app.get('/info', (req, res) => {
