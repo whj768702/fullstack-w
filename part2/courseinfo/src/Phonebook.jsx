@@ -53,6 +53,11 @@ const Phonebook = () => {
             setErrorMessage(null);
           }, 3000);
         }
+      }).catch(_ => {
+        setErrorMessage(`${newName}已经被删除,请刷新页面重新操作`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
       });
   }
   const handleSubmit = (e) => {
