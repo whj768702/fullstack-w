@@ -7,15 +7,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan((tokens, req, res) => {
-  if (req.method === 'POST') {
-    return [
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.status(req, res),
-      tokens['response-time'](req, res), 'ms',
-      JSON.stringify(req.body)
-    ].join(' ');
-  }
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens['response-time'](req, res), 'ms',
+    JSON.stringify(req.body)
+  ].join(' ');
 }));
 
 const persons = [
@@ -61,6 +59,12 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end();
   }
 });
+app.put('/api/persons/:id', (req, res) => {
+  const person = req.body;
+  const index = persons.findIndex(person => person.id == person.id);
+  persons[index].number = person.number;
+  res.json(persons[index]);
+});
 
 app.post('/api/persons', (req, res) => {
   const person = req.body;
@@ -77,7 +81,7 @@ app.post('/api/persons', (req, res) => {
     persons.push(person);
     res.json(person);
   }
-})
+});
 
 app.get('/info', (req, res) => {
   res.send(`

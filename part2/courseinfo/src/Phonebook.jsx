@@ -6,6 +6,8 @@ import PersonForm from './PersonForm';
 import Persons from './Persons';
 import Notification from './Notification';
 
+const COMMONURL = 'http://localhost:4000/api';
+
 const Phonebook = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('a new person name...');
@@ -16,7 +18,7 @@ const Phonebook = () => {
 
   const getPhonebook = () => {
     axios.get(
-      'http://localhost:3001/persons',
+      `${COMMONURL}/persons`,
     ).then(res => {
       setPersons(res.data);
       setShowPersons(res.data);
@@ -28,12 +30,12 @@ const Phonebook = () => {
 
   const addPhoneInfo = (info) => {
     axios.post(
-      'http://localhost:3001/persons',
+      `${COMMONURL}/persons`,
       info
     ).then(res => {
-      if (res.status === 201) {
-        setPersons(persons.concat(res.data));
-        setShowPersons(persons.concat(res.data));
+      if (res) {
+        setPersons(persons.concat(res));
+        setShowPersons(persons.concat(res));
         setNewName('');
         setNewPhone('');
         setErrorMessage(`${newName}添加成功`);
@@ -44,9 +46,9 @@ const Phonebook = () => {
     });
   }
   const updatePhoneInfo = (params) => {
-    axios.put(`http://localhost:3001/persons/${params.id}`, params)
+    axios.put(`${COMMONURL}/persons/${params.id}`, params)
       .then(res => {
-        if (res.status === 200) {
+        if (res) {
           getPhonebook();
           setErrorMessage(`${newName}号码更新成功,新号码${newPhone}`);
           setTimeout(() => {
@@ -95,9 +97,9 @@ const Phonebook = () => {
 
   const handleDelete = (id) => {
     axios.delete(
-      `http://localhost:3001/persons/${id}`,
+      `${COMMONURL}/persons/${id}`,
     ).then(res => {
-      if (res.status === 200) {
+      if (res) {
         getPhonebook();
 
         setErrorMessage(`${newName}删除成功`);
